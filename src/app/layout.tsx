@@ -8,9 +8,65 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
+const siteUrl = "https://buzzkaan.com";
+
 export const metadata: Metadata = {
-  title: "Kaan Demir",
-  description: "24 • Full Stack Developer. Building tools that quietly get out of the way.",
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: "Kaan Demir — Full Stack Developer",
+    template: "%s | Kaan Demir",
+  },
+  description:
+    "Full Stack Developer specializing in Next.js, TypeScript, and React. Building tools that quietly get out of the way.",
+  keywords: [
+    "Kaan Demir",
+    "Full Stack Developer",
+    "React",
+    "Next.js",
+    "TypeScript",
+    "Web Developer",
+    "Frontend Developer",
+    "Software Engineer",
+    "Portfolio",
+  ],
+  authors: [{ name: "Kaan Demir", url: siteUrl }],
+  creator: "Kaan Demir",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    alternateLocale: "tr_TR",
+    url: siteUrl,
+    siteName: "Kaan Demir",
+    title: "Kaan Demir — Full Stack Developer",
+    description:
+      "Full Stack Developer specializing in Next.js, TypeScript, and React. Building tools that quietly get out of the way.",
+    images: [
+      {
+        url: "/pp1.jpg",
+        width: 1125,
+        height: 1078,
+        alt: "Kaan Demir",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kaan Demir — Full Stack Developer",
+    description:
+      "Full Stack Developer specializing in Next.js, TypeScript, and React. Building tools that quietly get out of the way.",
+    images: ["/pp1.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   icons: {
     icon: "/icon.svg",
   },
