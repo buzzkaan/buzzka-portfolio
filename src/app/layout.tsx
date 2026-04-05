@@ -80,7 +80,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} h-full antialiased`}
+      className={`${geistSans.variable} h-full overflow-x-clip antialiased`}
       suppressHydrationWarning
     >
       <head>
