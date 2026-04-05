@@ -12,6 +12,7 @@ export function AboutSection() {
   const { lang } = useLang();
   const labels = sectionLabels[lang];
   const [track, setTrack] = useState<SpotifyTrack | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchTrack() {
@@ -21,6 +22,8 @@ export function AboutSection() {
         if (data.title) setTrack(data);
       } catch {
         /* silent */
+      } finally {
+        setLoading(false);
       }
     }
     fetchTrack();
@@ -40,8 +43,21 @@ export function AboutSection() {
           </ul>
         </div>
 
-        {/* Spotify now playing card — only shown when API returns data */}
-        {track && (
+        {/* Spotify now playing card */}
+        {loading && (
+          <div className="mx-auto w-full max-w-sm animate-pulse">
+            <div className="flex items-center gap-3 border border-edge bg-background px-4 py-3">
+              <div className="h-16 w-16 shrink-0 bg-muted-foreground/10" />
+              <div className="flex min-w-0 flex-1 flex-col gap-2">
+                <div className="h-2.5 w-20 rounded bg-muted-foreground/10" />
+                <div className="h-4 w-36 rounded bg-muted-foreground/15" />
+                <div className="h-3 w-24 rounded bg-muted-foreground/10" />
+              </div>
+              <div className="h-6 w-6 shrink-0 rounded-full bg-muted-foreground/10" />
+            </div>
+          </div>
+        )}
+        {!loading && track && (
           <div className="mx-auto w-full max-w-sm">
             <a
               href={track.songUrl}

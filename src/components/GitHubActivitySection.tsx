@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { SectionHeading } from "./SectionHeading";
 import {
   fetchContributions,
@@ -23,7 +24,58 @@ function getLevel(count: number): number {
   return 4;
 }
 
-export async function GitHubActivitySection() {
+function GitHubActivitySkeleton() {
+  return (
+    <div className="w-full py-2 px-6 animate-pulse">
+      <div className="flex gap-[2px] mb-1">
+        <div className="w-6" />
+        {Array.from({ length: 52 }, (_, i) => (
+          <div key={i} className="flex-1">
+            {i % 4 === 0 && <div className="h-2.5 w-6 rounded bg-muted-foreground/10" />}
+          </div>
+        ))}
+      </div>
+      <div className="grid gap-[2px]" style={{ gridTemplateColumns: `24px repeat(52, 1fr)`, gridTemplateRows: "repeat(7, 1fr)" }}>
+        {Array.from({ length: 7 }, (_, dayIndex) =>
+          [
+            <div key={`label-${dayIndex}`} className="flex items-center justify-end pr-0.5">
+              {dayIndex % 2 === 1 && <div className="h-2 w-4 rounded bg-muted-foreground/10" />}
+            </div>,
+            ...Array.from({ length: 52 }, (_, wi) => (
+              <div
+                key={`${wi}-${dayIndex}`}
+                className="aspect-square w-full rounded-[2px] bg-muted-foreground/10"
+              />
+            )),
+          ]
+        )}
+      </div>
+      <div className="mt-2 flex items-center justify-between">
+        <div className="h-3 w-48 rounded bg-muted-foreground/10" />
+        <div className="flex items-center gap-1">
+          <div className="h-3 w-6 rounded bg-muted-foreground/10" />
+          {Array.from({ length: 5 }, (_, i) => (
+            <div key={i} className="h-[11px] w-[11px] rounded-[2px] bg-muted-foreground/10" />
+          ))}
+          <div className="h-3 w-6 rounded bg-muted-foreground/10" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function GitHubActivitySection() {
+  return (
+    <section className="screen-line-before screen-line-after border-x border-edge">
+      <SectionHeading>GitHub Activity</SectionHeading>
+      <Suspense fallback={<GitHubActivitySkeleton />}>
+        <GitHubActivityContent />
+      </Suspense>
+    </section>
+  );
+}
+
+async function GitHubActivityContent() {
   const contributions = await fetchContributions();
 
   // Build heatmap data from real API or fallback to empty
@@ -45,9 +97,6 @@ export async function GitHubActivitySection() {
   });
 
   return (
-    <section className="screen-line-before screen-line-after border-x border-edge">
-      <SectionHeading>GitHub Activity</SectionHeading>
-
       <div className="w-full py-2 px-6">
         {/* Heatmap */}
         {weeks.length > 0 ? (
@@ -137,6 +186,5 @@ export async function GitHubActivitySection() {
           </div>
         )}
       </div>
-    </section>
   );
 }
