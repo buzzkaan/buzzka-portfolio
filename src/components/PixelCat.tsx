@@ -6,6 +6,27 @@ type Mood = "sleeping" | "idle" | "excited" | "dancing" | "rolling";
 
 const REACTIONS: Mood[] = ["excited", "dancing", "rolling"];
 
+const BUBBLES: Record<string, string[]> = {
+  excited: ["♥", ":3", "meow!"],
+  dancing: ["♪♫", "~♪~", "la la~"],
+  rolling: ["whee!", "woo!", "^_^"],
+};
+
+function SpeechBubble({ mood, clickCount }: { mood: Mood; clickCount: number }) {
+  if (mood === "sleeping" || mood === "idle") return null;
+  const options = BUBBLES[mood];
+  const text = options[clickCount % options.length];
+
+  return (
+    <span
+      className="absolute -top-6 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-popover border border-border px-1.5 py-0.5 font-mono text-[8px] text-foreground shadow-sm"
+      style={{ animation: "heart-pop 0.8s ease-out forwards" }}
+    >
+      {text}
+    </span>
+  );
+}
+
 function FerretAwake({ mood }: { mood: Mood }) {
   const isRolling = mood === "rolling";
   const isDancing = mood === "dancing";
@@ -14,8 +35,8 @@ function FerretAwake({ mood }: { mood: Mood }) {
   return (
     <svg
       viewBox="0 0 28 18"
-      width="84"
-      height="54"
+      width="56"
+      height="36"
       style={{
         imageRendering: "pixelated",
         animation: isRolling ? "ferret-roll 0.6s ease-in-out" : isDancing ? "ferret-bounce 0.4s ease-in-out infinite" : "none",
@@ -109,8 +130,8 @@ function FerretSleeping() {
   return (
     <svg
       viewBox="0 0 28 10"
-      width="84"
-      height="30"
+      width="56"
+      height="20"
       style={{
         imageRendering: "pixelated",
         animation: "ferret-breathe 2.5s ease-in-out infinite",
@@ -163,47 +184,17 @@ function FerretSvg({ mood }: { mood: Mood }) {
   return <FerretAwake mood={mood} />;
 }
 
-function HeartFloat({ delay, x }: { delay: number; x: number }) {
+function FloatingEmoji({ delay, x, children, duration = 0.8 }: { delay: number; x: number; children: React.ReactNode; duration?: number }) {
   return (
     <span
-      className="absolute text-sm select-none pointer-events-none"
+      className="absolute text-[10px] select-none pointer-events-none"
       style={{
         left: x,
-        bottom: 50,
-        animation: `heart-pop 0.8s ease-out ${delay}s forwards`,
+        bottom: 32,
+        animation: `heart-pop ${duration}s ease-out ${delay}s forwards`,
       }}
     >
-      ❤
-    </span>
-  );
-}
-
-function StarFloat({ delay, x }: { delay: number; x: number }) {
-  return (
-    <span
-      className="absolute text-xs select-none pointer-events-none"
-      style={{
-        left: x,
-        bottom: 50,
-        animation: `heart-pop 0.9s ease-out ${delay}s forwards`,
-      }}
-    >
-      ✨
-    </span>
-  );
-}
-
-function NoteFloat({ delay, x }: { delay: number; x: number }) {
-  return (
-    <span
-      className="absolute text-xs select-none pointer-events-none"
-      style={{
-        left: x,
-        bottom: 50,
-        animation: `heart-pop 1s ease-out ${delay}s forwards`,
-      }}
-    >
-      ♪
+      {children}
     </span>
   );
 }
@@ -211,10 +202,10 @@ function NoteFloat({ delay, x }: { delay: number; x: number }) {
 function ZFloat({ delay, x }: { delay: number; x: number }) {
   return (
     <span
-      className="absolute text-[10px] font-mono text-muted-foreground/60 select-none pointer-events-none"
+      className="absolute text-[8px] font-mono text-muted-foreground/60 select-none pointer-events-none"
       style={{
         left: x,
-        bottom: 50,
+        bottom: 28,
         animation: `z-float 2.2s ease-in-out ${delay}s infinite`,
       }}
     >
@@ -227,28 +218,28 @@ function Particles({ mood }: { mood: Mood }) {
   if (mood === "excited") {
     return (
       <>
-        <HeartFloat delay={0} x={10} />
-        <HeartFloat delay={0.15} x={30} />
-        <HeartFloat delay={0.3} x={50} />
+        <FloatingEmoji delay={0} x={6}>❤</FloatingEmoji>
+        <FloatingEmoji delay={0.15} x={22}>❤</FloatingEmoji>
+        <FloatingEmoji delay={0.3} x={38}>❤</FloatingEmoji>
       </>
     );
   }
   if (mood === "dancing") {
     return (
       <>
-        <NoteFloat delay={0} x={5} />
-        <NoteFloat delay={0.2} x={25} />
-        <NoteFloat delay={0.4} x={45} />
-        <NoteFloat delay={0.6} x={60} />
+        <FloatingEmoji delay={0} x={4} duration={1}>♪</FloatingEmoji>
+        <FloatingEmoji delay={0.2} x={18} duration={1}>♪</FloatingEmoji>
+        <FloatingEmoji delay={0.4} x={32} duration={1}>♪</FloatingEmoji>
+        <FloatingEmoji delay={0.6} x={46} duration={1}>♪</FloatingEmoji>
       </>
     );
   }
   if (mood === "rolling") {
     return (
       <>
-        <StarFloat delay={0} x={10} />
-        <StarFloat delay={0.2} x={35} />
-        <StarFloat delay={0.4} x={55} />
+        <FloatingEmoji delay={0} x={8} duration={0.9}>✨</FloatingEmoji>
+        <FloatingEmoji delay={0.2} x={24} duration={0.9}>✨</FloatingEmoji>
+        <FloatingEmoji delay={0.4} x={40} duration={0.9}>✨</FloatingEmoji>
       </>
     );
   }
@@ -289,7 +280,7 @@ export function PixelCat() {
 
   return (
     <div
-      className="select-none cursor-pointer"
+      className="select-none cursor-pointer group transition-transform duration-200 hover:scale-110 active:scale-95"
       onClick={handleClick}
       onKeyDown={(e) => e.key === "Enter" && handleClick()}
       aria-label="Pet the ferret"
@@ -302,20 +293,16 @@ export function PixelCat() {
           animation: mood === "excited" ? "ferret-wiggle 0.5s ease-in-out" : "none",
         }}
       >
+        <SpeechBubble mood={mood} clickCount={clickCount} />
         {mood === "sleeping" && (
           <>
-            <ZFloat delay={0} x={12} />
-            <ZFloat delay={0.7} x={28} />
-            <ZFloat delay={1.4} x={20} />
+            <ZFloat delay={0} x={8} />
+            <ZFloat delay={0.7} x={20} />
+            <ZFloat delay={1.4} x={14} />
           </>
         )}
         <Particles mood={mood} />
         <FerretSvg mood={mood} />
-        {clickCount > 0 && (
-          <span className="absolute -bottom-3 left-1/2 -translate-x-1/2 font-mono text-[9px] text-muted-foreground/50">
-            x{clickCount}
-          </span>
-        )}
       </div>
     </div>
   );

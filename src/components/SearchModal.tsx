@@ -56,12 +56,12 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-start justify-center pt-[20vh]"
+      className="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh] sm:pt-[20vh]"
       onClick={onClose}
     >
       <div className="absolute inset-0 bg-black/60" />
       <div
-        className="relative w-full max-w-md mx-4 border border-border bg-popover shadow-2xl overflow-hidden"
+        className="relative w-full max-w-md mx-4 max-h-[70dvh] flex flex-col border border-border bg-popover shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
@@ -82,7 +82,7 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
           </button>
         </div>
 
-        <div className="py-2">
+        <div className="py-2 overflow-y-auto flex-1">
           {filtered.length === 0 ? (
             <p className="px-4 py-3 text-sm text-muted-foreground">
               No results found.
@@ -93,7 +93,7 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
                 key={item.href}
                 href={item.href}
                 onClick={onClose}
-                className="flex flex-col gap-0.5 px-4 py-2.5 hover:bg-accent transition-colors duration-100"
+                className="flex flex-col gap-0.5 px-4 py-2.5 hover:bg-accent active:bg-accent transition-colors duration-100"
               >
                 <span className="text-sm text-foreground">{item.label}</span>
                 <span className="font-mono text-xs text-muted-foreground">{item.desc}</span>
