@@ -87,6 +87,10 @@
   font-weight: 500;
   font-style: normal;
   font-display: swap;
+  size-adjust: 100%;
+  ascent-override: 90%;
+  descent-override: 20%;
+  line-gap-override: 0%;
 }
 
 @font-face {
@@ -95,6 +99,10 @@
   font-weight: 500;
   font-style: normal;
   font-display: swap;
+  size-adjust: 100%;
+  ascent-override: 90%;
+  descent-override: 20%;
+  line-gap-override: 0%;
 }
 
 @layer base {
@@ -134,6 +142,26 @@
   }
 }
 
+/* Thin modern scrollbar — mobile only */
+@media (max-width: 767px) {
+  .thin-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: var(--muted-foreground) transparent;
+  }
+  .thin-scrollbar::-webkit-scrollbar {
+    height: 4px;
+  }
+  .thin-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .thin-scrollbar::-webkit-scrollbar-thumb {
+    background: color-mix(in oklab, var(--muted-foreground) 30%, transparent);
+  }
+  .thin-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in oklab, var(--muted-foreground) 50%, transparent);
+  }
+}
+
 /* Screen lines — full-width horizontal rules at section boundaries */
 .screen-line-before,
 .screen-line-after {
@@ -144,8 +172,9 @@
 .screen-line-after::after {
   content: '';
   position: absolute;
-  left: -100vw;
-  right: -100vw;
+  left: 50%;
+  width: 100vw;
+  transform: translateX(-50%);
   height: 1px;
   background: var(--edge);
   z-index: 1;

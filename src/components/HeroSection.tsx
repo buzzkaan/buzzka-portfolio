@@ -1,24 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Image from "next/image";
 import { Eye } from "lucide-react";
 import { VerifiedBadge } from "./icons";
 import { CornerCross } from "./Decorative";
+import { PixelAvatar } from "./PixelAvatar";
 import { LiveStatus } from "./LiveStatus";
 import { useLang } from "@/lib/language";
 import { profile } from "@/data/resume-data";
 
 export function HeroSection() {
   const { lang } = useLang();
-  const [index, setIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIndex((prev) => (prev + 1) % profile.avatars.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div className="screen-line-after relative flex border-x border-edge">
@@ -27,19 +18,7 @@ export function HeroSection() {
 
       {/* Avatar */}
       <div className="w-[35%] shrink-0 p-2 sm:w-auto sm:shrink-0 sm:p-5">
-        <div className="relative aspect-square h-auto w-full overflow-hidden border border-border p-1 sm:size-32">
-          {profile.avatars.map((src, i) => (
-            <Image
-              key={src}
-              src={src}
-              alt={profile.name}
-              width={130}
-              height={130}
-              className={`absolute inset-1 h-[calc(100%-8px)] w-[calc(100%-8px)] object-cover transition-opacity duration-700 ${i === index ? "opacity-100" : "opacity-0"}`}
-              priority={i === 0}
-            />
-          ))}
-        </div>
+        <PixelAvatar srcs={profile.avatars} alt={profile.name} />
       </div>
 
       {/* Info */}

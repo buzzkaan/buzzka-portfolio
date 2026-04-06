@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { SectionHeading } from "./SectionHeading";
+import { ScrollToEnd } from "./ScrollToEnd";
 import {
   fetchContributions,
   GITHUB_USERNAME,
@@ -27,37 +28,41 @@ function getLevel(count: number): number {
 function GitHubActivitySkeleton() {
   return (
     <div className="w-full py-2 px-6 animate-pulse">
-      <div className="flex gap-[2px] mb-1">
-        <div className="w-6" />
-        {Array.from({ length: 52 }, (_, i) => (
-          <div key={i} className="flex-1">
-            {i % 4 === 0 && <div className="h-2.5 w-6 rounded bg-muted-foreground/10" />}
+      <div className="overflow-x-auto md:overflow-x-visible">
+        <div className="min-w-[640px] md:min-w-0">
+          <div className="flex gap-[2px] mb-1">
+            <div className="w-6" />
+            {Array.from({ length: 52 }, (_, i) => (
+              <div key={i} className="flex-1">
+                {i % 4 === 0 && <div className="h-2.5 w-6 rounded bg-muted-foreground/10" />}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div className="grid gap-[2px]" style={{ gridTemplateColumns: `24px repeat(52, 1fr)`, gridTemplateRows: "repeat(7, 1fr)" }}>
-        {Array.from({ length: 7 }, (_, dayIndex) =>
-          [
-            <div key={`label-${dayIndex}`} className="flex items-center justify-end pr-0.5">
-              {dayIndex % 2 === 1 && <div className="h-2 w-4 rounded bg-muted-foreground/10" />}
-            </div>,
-            ...Array.from({ length: 52 }, (_, wi) => (
-              <div
-                key={`${wi}-${dayIndex}`}
-                className="aspect-square w-full rounded-[2px] bg-muted-foreground/10"
-              />
-            )),
-          ]
-        )}
-      </div>
-      <div className="mt-2 flex items-center justify-between">
-        <div className="h-3 w-48 rounded bg-muted-foreground/10" />
-        <div className="flex items-center gap-1">
-          <div className="h-3 w-6 rounded bg-muted-foreground/10" />
-          {Array.from({ length: 5 }, (_, i) => (
-            <div key={i} className="h-[11px] w-[11px] rounded-[2px] bg-muted-foreground/10" />
-          ))}
-          <div className="h-3 w-6 rounded bg-muted-foreground/10" />
+          <div className="grid gap-[2px]" style={{ gridTemplateColumns: `24px repeat(52, 1fr)`, gridTemplateRows: "repeat(7, 1fr)" }}>
+            {Array.from({ length: 7 }, (_, dayIndex) =>
+              [
+                <div key={`label-${dayIndex}`} className="flex items-center justify-end pr-0.5">
+                  {dayIndex % 2 === 1 && <div className="h-2 w-4 rounded bg-muted-foreground/10" />}
+                </div>,
+                ...Array.from({ length: 52 }, (_, wi) => (
+                  <div
+                    key={`${wi}-${dayIndex}`}
+                    className="aspect-square w-full rounded-[2px] bg-muted-foreground/10"
+                  />
+                )),
+              ]
+            )}
+          </div>
+        </div>
+        <div className="mt-2 flex items-center justify-between">
+          <div className="h-3 w-48 rounded bg-muted-foreground/10" />
+          <div className="flex items-center gap-1">
+            <div className="h-3 w-6 rounded bg-muted-foreground/10" />
+            {Array.from({ length: 5 }, (_, i) => (
+              <div key={i} className="h-[11px] w-[11px] rounded-[2px] bg-muted-foreground/10" />
+            ))}
+            <div className="h-3 w-6 rounded bg-muted-foreground/10" />
+          </div>
         </div>
       </div>
     </div>
@@ -100,61 +105,63 @@ async function GitHubActivityContent() {
       <div className="w-full py-2 px-6">
         {/* Heatmap */}
         {weeks.length > 0 ? (
-          <div>
-            {/* Month labels — aligned to grid columns */}
-            <div
-              className="grid mb-1"
-              style={{ gridTemplateColumns: `24px repeat(${weeks.length}, 1fr)`, gap: 2 }}
-            >
-              <div />
-              {weeks.map((week, wi) => {
-                const firstDay = week.contributionDays[0];
-                const showLabel = firstDay && monthLabels.some((m) => m.col === wi);
-                const label = showLabel
-                  ? MONTHS[new Date(firstDay.date).getMonth()]
-                  : null;
-                return (
-                  <div key={wi} className="overflow-visible">
-                    {label && (
-                      <span className="text-[10px] text-muted-foreground/60 font-mono whitespace-nowrap">
-                        {label}
-                      </span>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Heatmap grid — single grid for labels + squares */}
-            <div
-              className="grid"
-              style={{
-                gridTemplateColumns: `24px repeat(${weeks.length}, 1fr)`,
-                gridTemplateRows: "repeat(7, 1fr)",
-                gap: 2,
-              }}
-            >
-              {Array.from({ length: 7 }, (_, dayIndex) => [
-                /* Day label */
-                <div key={`label-${dayIndex}`} className="flex items-center justify-end pr-0.5">
-                  <span className="text-[9px] text-muted-foreground/50 font-mono leading-none">
-                    {DAYS[dayIndex]}
-                  </span>
-                </div>,
-                /* Squares for this day across all weeks */
-                ...weeks.map((week, wi) => {
-                  const day = week.contributionDays[dayIndex];
-                  if (!day) return <div key={`${wi}-${dayIndex}`} />;
-                  const level = getLevel(day.contributionCount);
+          <ScrollToEnd className="overflow-x-auto md:overflow-x-visible">
+            <div className="min-w-[640px] md:min-w-0">
+              {/* Month labels — aligned to grid columns */}
+              <div
+                className="grid mb-1"
+                style={{ gridTemplateColumns: `24px repeat(${weeks.length}, 1fr)`, gap: 2 }}
+              >
+                <div />
+                {weeks.map((week, wi) => {
+                  const firstDay = week.contributionDays[0];
+                  const showLabel = firstDay && monthLabels.some((m) => m.col === wi);
+                  const label = showLabel
+                    ? MONTHS[new Date(firstDay.date).getMonth()]
+                    : null;
                   return (
-                    <div
-                      key={`${wi}-${dayIndex}`}
-                      className={`aspect-square w-full rounded-[2px] ${LEVEL_COLORS[level]}`}
-                      title={`${day.contributionCount} contributions on ${day.date}`}
-                    />
+                    <div key={wi} className="overflow-visible">
+                      {label && (
+                        <span className="text-[10px] text-muted-foreground/60 font-mono whitespace-nowrap">
+                          {label}
+                        </span>
+                      )}
+                    </div>
                   );
-                }),
-              ])}
+                })}
+              </div>
+
+              {/* Heatmap grid — single grid for labels + squares */}
+              <div
+                className="grid"
+                style={{
+                  gridTemplateColumns: `24px repeat(${weeks.length}, 1fr)`,
+                  gridTemplateRows: "repeat(7, 1fr)",
+                  gap: 2,
+                }}
+              >
+                {Array.from({ length: 7 }, (_, dayIndex) => [
+                  /* Day label */
+                  <div key={`label-${dayIndex}`} className="flex items-center justify-end pr-0.5">
+                    <span className="text-[9px] text-muted-foreground/50 font-mono leading-none">
+                      {DAYS[dayIndex]}
+                    </span>
+                  </div>,
+                  /* Squares for this day across all weeks */
+                  ...weeks.map((week, wi) => {
+                    const day = week.contributionDays[dayIndex];
+                    if (!day) return <div key={`${wi}-${dayIndex}`} />;
+                    const level = getLevel(day.contributionCount);
+                    return (
+                      <div
+                        key={`${wi}-${dayIndex}`}
+                        className={`aspect-square w-full rounded-[2px] ${LEVEL_COLORS[level]}`}
+                        title={`${day.contributionCount} contributions on ${day.date}`}
+                      />
+                    );
+                  }),
+                ])}
+              </div>
             </div>
 
             {/* Footer: activity count + legend */}
@@ -175,7 +182,7 @@ async function GitHubActivityContent() {
                 <span>More</span>
               </div>
             </div>
-          </div>
+          </ScrollToEnd>
         ) : (
           <div className="text-center py-6">
             <p className="font-mono text-xs text-muted-foreground">

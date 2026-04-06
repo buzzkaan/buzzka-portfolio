@@ -8,6 +8,7 @@ import { ExperienceSection } from "@/components/ExperienceSection";
 import { EducationSection } from "@/components/EducationSection";
 import { CertificationsSection } from "@/components/CertificationsSection";
 import { QuoteSection } from "@/components/QuoteSection";
+import { ViewProjectsCTA } from "@/components/ViewProjectsCTA";
 import { FooterSection } from "@/components/FooterSection";
 
 export default function Home() {
@@ -30,6 +31,8 @@ export default function Home() {
           <EducationSection />
           <StripeDivider />
           <CertificationsSection />
+          <StripeDivider />
+          <ViewProjectsCTA />
           <StripeDivider />
           <QuoteSection />
           <StripeDivider />

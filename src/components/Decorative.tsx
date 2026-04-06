@@ -36,7 +36,7 @@ export function StripeDivider() {
   return (
     <div className="relative flex h-6 w-full border-x border-edge">
       <div
-        className="absolute -left-[100vw] -z-10 h-6 w-[200vw]"
+        className="absolute left-1/2 -z-10 h-6 w-screen -translate-x-1/2"
         style={{
           backgroundImage: "repeating-linear-gradient(315deg, color-mix(in oklab, var(--color-edge) 55%, transparent) 0, color-mix(in oklab, var(--color-edge) 55%, transparent) 1px, transparent 0, transparent 50%)",
           backgroundSize: "10px 10px",

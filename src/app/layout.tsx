@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import { LanguageProvider } from "@/lib/language";
+import { PixelTransition } from "@/components/PixelTransition";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -84,6 +85,8 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <head>
+        <link rel="preload" href="/fonts/GeistPixelSquare.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/GeistPixelGrid.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem('theme');if(t==='dark'){document.documentElement.classList.add('dark')}else if(!t||t==='system'){if(window.matchMedia('(prefers-color-scheme:dark)').matches){document.documentElement.classList.add('dark')}}}catch(e){}})();`,
@@ -91,6 +94,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-full flex flex-col overflow-x-clip">
+        <PixelTransition />
         <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
