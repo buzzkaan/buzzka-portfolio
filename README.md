@@ -1,4 +1,4 @@
-# buzzka.dev
+# buzzkaan.com
 
 Personal portfolio website built with Next.js 16, shadcn/ui, and Tailwind CSS v4.
 
