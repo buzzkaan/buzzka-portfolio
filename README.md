@@ -6,9 +6,13 @@ Personal portfolio website built with Next.js 16, shadcn/ui, and Tailwind CSS v4
 
 🌐 Website: https://www.buzzkaan.com/
 
-🎥 Demo Video:
-[![Watch Demo](https://img.youtube.com/vi/-A3aLoXyeeY/0.jpg)]
-(https://youtube.com/shorts/-A3aLoXyeeY)
+## 🚀 Live Preview
+
+[![Website Preview](https://image.thum.io/get/https://www.buzzkaan.com/)](https://www.buzzkaan.com/)
+
+## 🎥 Demo Video
+
+[![Watch Demo](https://img.youtube.com/vi/qJScoACHX-0/0.jpg)](https://www.youtube.com/watch?v=qJScoACHX-0)
 
 ## Features
 
