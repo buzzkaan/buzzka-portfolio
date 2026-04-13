@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback } from "react";
 import Image from "next/image";
+import { shuffleIndices, getThemeColor, drawPixelTiles } from "@/lib/pixelAnimation";
 
 const GRID = 6;
 const DURATION = 500;
@@ -39,17 +40,9 @@ export function PixelAvatar({
 
     const ctx = canvas.getContext("2d")!;
     const cols = Math.ceil(w / GRID);
-    const rows = Math.ceil(h / GRID);
-    const total = cols * rows;
-
-    const indices = Array.from({ length: total }, (_, i) => i);
-    for (let i = total - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [indices[i], indices[j]] = [indices[j], indices[i]];
-    }
-
-    const isDark = document.documentElement.classList.contains("dark");
-    const color = isDark ? "#000" : "#fff";
+    const total = Math.ceil(w / GRID) * Math.ceil(h / GRID);
+    const indices = shuffleIndices(total);
+    const color = getThemeColor();
 
     const half = DURATION / 2;
     let start: number | null = null;
@@ -60,30 +53,17 @@ export function PixelAvatar({
       const elapsed = ts - start;
 
       ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = color;
 
       if (elapsed < half) {
-        const progress = elapsed / half;
-        const count = Math.floor(progress * total);
-        for (let i = 0; i < count; i++) {
-          const idx = indices[i];
-          const col = idx % cols;
-          const row = Math.floor(idx / cols);
-          ctx.fillRect(col * GRID, row * GRID, GRID, GRID);
-        }
+        const count = Math.floor((elapsed / half) * total);
+        drawPixelTiles(ctx, indices, count, cols, GRID, color);
       } else {
         if (!swapped) {
           swapped = true;
           setIndex(next);
         }
-        const progress = (elapsed - half) / half;
-        const remaining = total - Math.floor(progress * total);
-        for (let i = 0; i < remaining; i++) {
-          const idx = indices[i];
-          const col = idx % cols;
-          const row = Math.floor(idx / cols);
-          ctx.fillRect(col * GRID, row * GRID, GRID, GRID);
-        }
+        const remaining = total - Math.floor(((elapsed - half) / half) * total);
+        drawPixelTiles(ctx, indices, remaining, cols, GRID, color);
       }
 
       if (elapsed < DURATION) {

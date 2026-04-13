@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { SpotifyIcon } from "./icons";
-import { SectionHeading } from "./SectionHeading";
+import { SectionWrapper } from "./SectionWrapper";
 import { useLang } from "@/lib/language";
 import { about, sectionLabels } from "@/data/resume-data";
 import type { SpotifyTrack } from "@/lib/spotify";
@@ -32,9 +32,8 @@ export function AboutSection() {
   }, []);
 
   return (
-    <section data-slot="panel" className="screen-line-before screen-line-after border-x border-edge">
-      <SectionHeading>{labels.about}</SectionHeading>
-      <div data-slot="panel-body" className="p-4 space-y-4">
+    <SectionWrapper heading={labels.about}>
+      <div className="p-4 space-y-4">
         <div className="max-w-none font-mono text-sm leading-relaxed text-foreground/80">
           <ul className="list-disc space-y-3 pl-5 marker:text-muted-foreground/50">
             {about[lang].map((paragraph, i) => (
@@ -100,6 +99,6 @@ export function AboutSection() {
           </div>
         )}
       </div>
-    </section>
+    </SectionWrapper>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
@@ -8,6 +8,7 @@ import { ThemeToggle } from "./ThemeToggle";
 import { LanguageToggle } from "./LanguageToggle";
 import { SearchModal } from "./SearchModal";
 import { useLang } from "@/lib/language";
+import { useClickOutside } from "@/hooks/useClickOutside";
 import { profile, navMoreLinks, sectionLabels, resolve } from "@/data/resume-data";
 
 export function NavBar() {
@@ -28,15 +29,8 @@ export function NavBar() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  useEffect(() => {
-    function onClick(e: MouseEvent) {
-      if (moreRef.current && !moreRef.current.contains(e.target as Node)) {
-        setMoreOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", onClick);
-    return () => document.removeEventListener("mousedown", onClick);
-  }, []);
+  const closeMore = useCallback(() => setMoreOpen(false), []);
+  useClickOutside(moreRef, closeMore);
 
   return (
     <>

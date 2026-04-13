@@ -2,6 +2,7 @@
 
 import { useEffect, useCallback, useRef } from "react";
 import { usePathname } from "next/navigation";
+import { shuffleIndices, getThemeColor, drawPixelTiles } from "@/lib/pixelAnimation";
 
 const GRID = 12;
 const DURATION = 700;
@@ -25,12 +26,7 @@ export function PixelTransition() {
     const cols = Math.ceil(w / GRID);
     const rows = Math.ceil(h / GRID);
     const total = cols * rows;
-    const indices = Array.from({ length: total }, (_, i) => i);
-    for (let i = total - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [indices[i], indices[j]] = [indices[j], indices[i]];
-    }
-    return { canvas, ctx, cols, rows, total, indices, w, h };
+    return { canvas, ctx, cols, rows, total, indices: shuffleIndices(total), w, h };
   }, []);
 
   // Initial page load — start fully covered, then reveal
@@ -43,10 +39,8 @@ export function PixelTransition() {
     animating.current = true;
 
     const { ctx, cols, total, indices, w, h } = setup();
-    const isDark = document.documentElement.classList.contains("dark");
-    const color = isDark ? "#000" : "#fff";
+    const color = getThemeColor();
 
-    // Draw full cover immediately
     ctx.fillStyle = color;
     ctx.fillRect(0, 0, w, h);
 
@@ -60,13 +54,7 @@ export function PixelTransition() {
       const remaining = total - Math.floor(eased * total);
 
       ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = color;
-      for (let i = 0; i < remaining; i++) {
-        const idx = indices[i];
-        const col = idx % cols;
-        const row = Math.floor(idx / cols);
-        ctx.fillRect(col * GRID, row * GRID, GRID, GRID);
-      }
+      drawPixelTiles(ctx, indices, remaining, cols, GRID, color);
 
       if (progress < 1) {
         requestAnimationFrame(reveal);
@@ -87,9 +75,7 @@ export function PixelTransition() {
     animating.current = true;
 
     const { ctx, cols, total, indices, w, h } = setup();
-    const isDark = document.documentElement.classList.contains("dark");
-    const color = isDark ? "#000" : "#fff";
-
+    const color = getThemeColor();
     const half = DURATION / 2;
     let start: number | null = null;
 
@@ -98,26 +84,12 @@ export function PixelTransition() {
       const elapsed = ts - start;
 
       if (elapsed < half) {
-        const progress = elapsed / half;
-        const count = Math.floor(progress * total);
-        ctx.fillStyle = color;
-        for (let i = 0; i < count; i++) {
-          const idx = indices[i];
-          const col = idx % cols;
-          const row = Math.floor(idx / cols);
-          ctx.fillRect(col * GRID, row * GRID, GRID, GRID);
-        }
+        const count = Math.floor((elapsed / half) * total);
+        drawPixelTiles(ctx, indices, count, cols, GRID, color);
       } else {
-        const progress = (elapsed - half) / half;
-        const remaining = total - Math.floor(progress * total);
+        const remaining = total - Math.floor(((elapsed - half) / half) * total);
         ctx.clearRect(0, 0, w, h);
-        ctx.fillStyle = color;
-        for (let i = 0; i < remaining; i++) {
-          const idx = indices[i];
-          const col = idx % cols;
-          const row = Math.floor(idx / cols);
-          ctx.fillRect(col * GRID, row * GRID, GRID, GRID);
-        }
+        drawPixelTiles(ctx, indices, remaining, cols, GRID, color);
       }
 
       if (elapsed < DURATION) {
@@ -139,10 +111,7 @@ export function PixelTransition() {
         if (m.attributeName === "class") runTransition();
       }
     });
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ["class"] });
     return () => observer.disconnect();
   }, [runTransition]);
 

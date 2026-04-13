@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { SectionHeading } from "./SectionHeading";
+import { SectionWrapper } from "./SectionWrapper";
 import { ScrollToEnd } from "./ScrollToEnd";
 import {
   fetchContributions,
@@ -71,12 +71,11 @@ function GitHubActivitySkeleton() {
 
 export function GitHubActivitySection() {
   return (
-    <section className="screen-line-before screen-line-after border-x border-edge">
-      <SectionHeading>GitHub Activity</SectionHeading>
+    <SectionWrapper heading="GitHub Activity">
       <Suspense fallback={<GitHubActivitySkeleton />}>
         <GitHubActivityContent />
       </Suspense>
-    </section>
+    </SectionWrapper>
   );
 }
 

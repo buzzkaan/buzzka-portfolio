@@ -303,6 +303,32 @@ export const quotes = [
   { text: "I was not born with a whole lot of natural talent... but I work hard and I never give up.", author: "Rock Lee" },
 ] as const;
 
+// ─── Search Items ────────────────────────────────────────
+export interface SearchItem {
+  label: string;
+  href: string;
+  desc: string;
+}
+
+export const searchItems = {
+  en: [
+    { label: sectionLabels.en.home, href: "/", desc: "Back to homepage" },
+    { label: sectionLabels.en.projects, href: "/projects", desc: "View all projects" },
+    { label: sectionLabels.en.about, href: "/#about", desc: "Jump to section" },
+    { label: sectionLabels.en.experience, href: "/#experience", desc: "Jump to section" },
+    { label: sectionLabels.en.education, href: "/#education", desc: "Jump to section" },
+    { label: sectionLabels.en.connect, href: "/#connect", desc: "Jump to section" },
+  ] as SearchItem[],
+  tr: [
+    { label: sectionLabels.tr.home, href: "/", desc: "Ana sayfaya dön" },
+    { label: sectionLabels.tr.projects, href: "/projects", desc: "Tüm projeleri gör" },
+    { label: sectionLabels.tr.about, href: "/#about", desc: "Bölüme git" },
+    { label: sectionLabels.tr.experience, href: "/#experience", desc: "Bölüme git" },
+    { label: sectionLabels.tr.education, href: "/#education", desc: "Bölüme git" },
+    { label: sectionLabels.tr.connect, href: "/#connect", desc: "Bölüme git" },
+  ] as SearchItem[],
+};
+
 // ─── Projects Page Intro ─────────────────────────────────
 export const projectsIntro = i18n({
   en: "Projects I've built along the way — tools, experiments, and things that quietly get out of the way so users can focus on what actually matters.",

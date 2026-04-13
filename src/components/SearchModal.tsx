@@ -4,25 +4,7 @@ import { useEffect, useState } from "react";
 import { Search, X } from "lucide-react";
 import Link from "next/link";
 import { useLang } from "@/lib/language";
-
-const ALL_ITEMS = {
-  en: [
-    { label: "Home", href: "/", desc: "Back to homepage" },
-    { label: "Projects", href: "/projects", desc: "View all projects" },
-    { label: "About", href: "/#about", desc: "Jump to section" },
-    { label: "Experience", href: "/#experience", desc: "Jump to section" },
-    { label: "Education", href: "/#education", desc: "Jump to section" },
-    { label: "Connect", href: "/#connect", desc: "Jump to section" },
-  ],
-  tr: [
-    { label: "Ana Sayfa", href: "/", desc: "Ana sayfaya dön" },
-    { label: "Projeler", href: "/projects", desc: "Tüm projeleri gör" },
-    { label: "Hakkımda", href: "/#about", desc: "Bölüme git" },
-    { label: "Deneyim", href: "/#experience", desc: "Bölüme git" },
-    { label: "Eğitim", href: "/#education", desc: "Bölüme git" },
-    { label: "İletişim", href: "/#connect", desc: "Bölüme git" },
-  ],
-};
+import { searchItems } from "@/data/resume-data";
 
 interface SearchModalProps {
   open: boolean;
@@ -45,7 +27,7 @@ export function SearchModal({ open, onClose }: SearchModalProps) {
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
-  const items = ALL_ITEMS[lang];
+  const items = searchItems[lang];
   const filtered = query
     ? items.filter((i) =>
         i.label.toLowerCase().includes(query.toLowerCase())
