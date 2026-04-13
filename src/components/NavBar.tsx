@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
@@ -36,8 +35,13 @@ export function NavBar() {
     <>
       <header className="sticky top-0 z-50 overflow-x-clip bg-background px-2 pt-2">
         <div className="screen-line-before screen-line-after mx-auto flex h-12 items-center justify-between gap-2 border-x border-edge px-2 sm:gap-4 md:max-w-3xl">
-          <Link href="/" aria-label="Home">
-            <Image src="/icon.svg" alt={profile.name} width={36} height={36} className="h-9 w-9" />
+          <Link href="/" aria-label="Home" className="text-foreground">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 9" fill="none" width="36" height="18" aria-hidden="true">
+              <g fill="currentColor">
+                <rect x="0" y="0" width="2" height="9"/><rect x="4" y="0" width="2" height="2"/><rect x="3" y="2" width="2" height="1"/><rect x="2" y="3" width="2" height="1"/><rect x="2" y="4" width="3" height="1"/><rect x="3" y="5" width="2" height="1"/><rect x="4" y="6" width="2" height="1"/><rect x="5" y="7" width="2" height="2"/>
+                <rect x="9" y="0" width="2" height="9"/><rect x="11" y="0" width="3" height="2"/><rect x="14" y="1" width="2" height="2"/><rect x="15" y="3" width="2" height="3"/><rect x="14" y="6" width="2" height="2"/><rect x="11" y="7" width="3" height="2"/>
+              </g>
+            </svg>
           </Link>
 
           <div className="flex-1" />

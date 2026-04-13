@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { SectionWrapper } from "./SectionWrapper";
 import { ScrollToEnd } from "./ScrollToEnd";
+import { ContributionGrid } from "./ContributionGrid";
 import {
   fetchContributions,
   GITHUB_USERNAME,
@@ -130,37 +131,8 @@ async function GitHubActivityContent() {
                 })}
               </div>
 
-              {/* Heatmap grid — single grid for labels + squares */}
-              <div
-                className="grid"
-                style={{
-                  gridTemplateColumns: `24px repeat(${weeks.length}, 1fr)`,
-                  gridTemplateRows: "repeat(7, 1fr)",
-                  gap: 2,
-                }}
-              >
-                {Array.from({ length: 7 }, (_, dayIndex) => [
-                  /* Day label */
-                  <div key={`label-${dayIndex}`} className="flex items-center justify-end pr-0.5">
-                    <span className="text-[9px] text-muted-foreground/50 font-mono leading-none">
-                      {DAYS[dayIndex]}
-                    </span>
-                  </div>,
-                  /* Squares for this day across all weeks */
-                  ...weeks.map((week, wi) => {
-                    const day = week.contributionDays[dayIndex];
-                    if (!day) return <div key={`${wi}-${dayIndex}`} />;
-                    const level = getLevel(day.contributionCount);
-                    return (
-                      <div
-                        key={`${wi}-${dayIndex}`}
-                        className={`aspect-square w-full rounded-[2px] ${LEVEL_COLORS[level]}`}
-                        title={`${day.contributionCount} contributions on ${day.date}`}
-                      />
-                    );
-                  }),
-                ])}
-              </div>
+              {/* Heatmap grid — client component for hover tooltips */}
+              <ContributionGrid weeks={weeks} />
             </div>
 
             {/* Footer: activity count + legend */}
