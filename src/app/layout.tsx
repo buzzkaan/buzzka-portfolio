@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import { PixelTransition } from "@/components/decorative/PixelTransition";
 import { LanguageProvider } from "@/lib/language";
-import { PixelTransition } from "@/components/PixelTransition";
 import "./globals.css";
 
 const geistSans = Geist({

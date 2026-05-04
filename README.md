@@ -22,6 +22,25 @@ Personal portfolio website built with Next.js 16, shadcn/ui, and Tailwind CSS v4
 - Responsive brutalist/pixel-art design
 - Interactive pixel ferret companion
 
+## Template Structure
+
+Most personal content lives in `src/data/resume-data.tsx`, so you can customize
+the portfolio without digging through page components.
+
+```txt
+src/
+  app/                  Next.js routes and metadata
+  components/
+    layout/             Site shell, navigation, footer, nav controls
+    sections/           Page-specific portfolio sections
+    ui/                 Reusable primitives such as buttons, tags, accordions
+    decorative/         Pixel art, patterns, dividers, visual-only pieces
+    modals/             Overlay UI such as search
+  data/                 Editable profile, projects, resume, nav and copy data
+  hooks/                Shared client hooks
+  lib/                  Integrations and utility helpers
+```
+
 ## Getting Started
 
 ```bash

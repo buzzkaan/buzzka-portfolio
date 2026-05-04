@@ -1,5 +1,5 @@
 import { Mail } from "lucide-react";
-import { GitHubIcon, LinkedInIcon, PenIcon } from "@/components/icons";
+import { GitHubIcon, LinkedInIcon, PenIcon } from "@/components/ui/icons";
 import type { Lang } from "@/lib/language";
 
 // ─────────────────────────────────────────────────────────

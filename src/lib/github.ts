@@ -27,9 +27,9 @@ export interface ContributionCalendar {
 // ---------- GraphQL API (contribution calendar) ----------
 
 const CONTRIBUTIONS_QUERY = `
-  query($login: String!) {
+  query($login: String!, $from: DateTime, $to: DateTime) {
     user(login: $login) {
-      contributionsCollection {
+      contributionsCollection(from: $from, to: $to) {
         contributionCalendar {
           totalContributions
           weeks {
@@ -44,13 +44,21 @@ const CONTRIBUTIONS_QUERY = `
   }
 `;
 
-export async function fetchContributions(): Promise<ContributionCalendar | null> {
+interface FetchContributionsOptions {
+  from?: string;
+  to?: string;
+}
+
+export async function fetchContributions({
+  from,
+  to,
+}: FetchContributionsOptions = {}): Promise<ContributionCalendar | null> {
   if (!GITHUB_TOKEN) return null;
   try {
     const res = await fetch("https://api.github.com/graphql", {
       method: "POST",
       headers: graphqlHeaders,
-      body: JSON.stringify({ query: CONTRIBUTIONS_QUERY, variables: { login: GITHUB_USER } }),
+      body: JSON.stringify({ query: CONTRIBUTIONS_QUERY, variables: { login: GITHUB_USER, from, to } }),
       next: { revalidate: 3600 },
     });
     if (!res.ok) return null;
